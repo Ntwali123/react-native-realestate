@@ -1,29 +1,34 @@
-import images from "@/constants/images";
-import icons from "@/constants/icons";
 import React from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
 import {
-  SafeAreaView,
-  ScrollView,
+  Alert,
   Image,
-  View,
+  ScrollView,
   Text,
   TouchableOpacity,
-  Alert,
+  View,
 } from "react-native";
-import { login } from "@/lib/appwrite";
-// import { Redirect } from "expo-router";
-// import { useGlobalContext } from "@/lib/global-provider";
 
-const signIn = () => {
+import { login } from "@/lib/appwrite";
+import { Redirect } from "expo-router";
+import { useGlobalContext } from "@/lib/global-provider";
+import icons from "@/constants/icons";
+import images from "@/constants/images";
+
+const Auth = () => {
+  const { refetch, loading, isLogged } = useGlobalContext();
+
+  if (!loading && isLogged) return <Redirect href="/" />;
+
   const handleLogin = async () => {
     const result = await login();
-
     if (result) {
-      console.log("Login Success");
+      refetch();
     } else {
       Alert.alert("Error", "Failed to login");
     }
   };
+
   return (
     <SafeAreaView className="bg-white h-full">
       <ScrollView
@@ -72,4 +77,4 @@ const signIn = () => {
   );
 };
 
-export default signIn;
+export default Auth;
